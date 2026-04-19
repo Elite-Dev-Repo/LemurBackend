@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, ListCreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from .models import Post
-from .serializers import PostSerializer, UserSerializer
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from .serializers import PostSerializer
+from .user_serializers import UserSerializer
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -13,6 +15,12 @@ class GetUserVIew(RetrieveAPIView):
     def get_object(self):
         return self.request.user
     
+
+
+class UserCreateView(CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 
 
 
@@ -42,12 +50,13 @@ class PostListCreateAPIView(ListCreateAPIView):
 
 
 class PostRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated]
-    lookup_field = 'pk'
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    lookup_field = 'id'
 
-
-
-    def get_queryset(self):
-        user = self.request.user
-        return Post.objects.filter(author=user)
+    def get_permissions(self):
+       
+        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
+            return [IsAuthenticated()] 
+        return [IsAuthenticatedOrReadOnly()]

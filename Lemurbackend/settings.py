@@ -12,10 +12,14 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-
+import dj_database_url
 load_dotenv()
 
 from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),}
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,7 +35,7 @@ SECRET_KEY = 'django-insecure-iu$w+9@7f)l5494634q*n+x-$nofver4j^-!&cu1_j2)7j)_uo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv('FRONEND_URL')]
+ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
 
 
 # Application definition
@@ -112,13 +116,20 @@ WSGI_APPLICATION = 'Lemurbackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+#DATABASES = {
+#    'default': {
+ #       'ENGINE': 'django.db.backends.sqlite3',
+  #      'NAME': BASE_DIR / 'db.sqlite3',
+   # }
+#}
 
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -160,6 +171,6 @@ STATIC_URL = 'static/'
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    os.getenv('FRONEND_URL'),
+    os.getenv('FRONTEND_URL'),
 
 ]

@@ -25,10 +25,15 @@ class Post(models.Model):
         return self.likes.count()
 
 
+    @property
+    def comment_count(self):
+        return self.comment.count()
 
 
-class Meta:
-    ordering = ['-created_at']
+
+
+    class Meta:
+        ordering = ['-created_at']
 
 
 

@@ -9,11 +9,11 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly
 class CommunityCreateView(CreateAPIView):
     queryset = Community.objects.all()
     serializer_class = CommunitySerializer
-    permission_classes = (IsAdminUser)
+    permission_classes = [IsAdminUser]
 
 
 
 class CommunityListView(ListAPIView):
     queryset = Community.objects.all()
     serializer_class = CommunitySerializer
-    permission_classes = (IsAuthenticatedOrReadOnly)
+    permission_classes = [IsAuthenticatedOrReadOnly]
