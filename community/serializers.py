@@ -5,3 +5,10 @@ class CommunitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Community
         fields = '__all__'
+
+
+class CommunityListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Community
+        fields = ['id', 'name']
+
