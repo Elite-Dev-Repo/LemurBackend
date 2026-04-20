@@ -184,8 +184,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    os.getenv('FRONTEND_URL'),
+# CORS_ALLOWED_ORIGINS = [
+  #  os.getenv('FRONTEND_URL'),
 
-]
+#]
