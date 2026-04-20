@@ -121,20 +121,29 @@ WSGI_APPLICATION = 'Lemurbackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+
 #DATABASES = {
-#    'default': {
- #       'ENGINE': 'django.db.backends.sqlite3',
-  #      'NAME': BASE_DIR / 'db.sqlite3',
-   # }
+ #   'default': dj_database_url.config(
+  #      default=os.getenv('DATABASE_URL'),
+   #     conn_max_age=600,
+   #     ssl_require=True
+    #)
 #}
 
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DATABASE', 'postgres'),
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+            'HOST': os.getenv('POSTGRES_HOST'),
+            'PORT': os.getenv('POSTGRES_PORT', '5432'),
+            'OPTIONS': {
+                'sslmode': 'require',
+            }
+        }
+    }
 
 DATABASES['default']['DISABLE_SERVER_SIDE_CURSORS'] = True
 
