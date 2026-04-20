@@ -35,7 +35,12 @@ SECRET_KEY = 'django-insecure-iu$w+9@7f)l5494634q*n+x-$nofver4j^-!&cu1_j2)7j)_uo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [os.getenv('ALLOWED_HOSTS')]
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '.vercel.app',  # The dot at the start acts as a wildcard for all Vercel subdomains
+    'lemur-backend-2-dmwt3ayui-oyenekan-emmanuels-projects.vercel.app', # Your current specific URL
+]
 
 
 # Application definition
