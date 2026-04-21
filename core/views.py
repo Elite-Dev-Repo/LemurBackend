@@ -35,17 +35,27 @@ class UserPostsListView(ListAPIView):
 
 
 
+from django.db.models import Count
+
 class PostListCreateAPIView(ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filterset_fields = ['author']
+
 
     def get_queryset(self):
-        return Post.objects.all()
-
+        return (
+            Post.objects
+            .select_related("author", "community")
+            .prefetch_related("comments", "likes")
+            .annotate(
+                like_count=Count("likes"),
+                comment_count=Count("comments"),
+            )
+            .order_by("-created_at")
+        )
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-
-
 
 
 

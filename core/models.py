@@ -16,28 +16,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
-
-
-
-    @property
-    def like_count(self):
-        return self.likes.count()
-
-
-    @property
-    def comment_count(self):
-        return self.comment.count()
-
-
-
-
     class Meta:
         ordering = ['-created_at']
-
-
-
-
 
     def __str__(self):
         return self.title

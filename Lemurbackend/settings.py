@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 import dj_database_url
 load_dotenv()
 
+
 from datetime import timedelta
 
 SIMPLE_JWT = {
@@ -58,6 +59,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'django_filters',
+
 ]
 
 MIDDLEWARE = [
@@ -105,7 +108,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
-  
+   'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 
@@ -123,12 +126,17 @@ WSGI_APPLICATION = 'Lemurbackend.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
+   'default': dj_database_url.config(
+      default=os.getenv('DATABASE_URL'),
         conn_max_age=600,
         ssl_require=True
     )
 }
+
+DATABASES["default"]["OPTIONS"] = {
+    "sslmode": "require",
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
