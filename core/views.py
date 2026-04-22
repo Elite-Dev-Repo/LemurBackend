@@ -5,6 +5,7 @@ from .serializers import PostSerializer
 from .user_serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 # Create your views here.
 
@@ -35,7 +36,7 @@ class UserPostsListView(ListAPIView):
 
 
 
-from django.db.models import Count
+
 
 class PostListCreateAPIView(ListCreateAPIView):
     serializer_class = PostSerializer
@@ -60,7 +61,10 @@ class PostListCreateAPIView(ListCreateAPIView):
 
 
 class PostRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.all()
+    queryset = Post.objects.prefetch_related("comments", "likes") .annotate(
+                like_count=Count("likes"),
+                comment_count=Count("comments"),
+            )
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     lookup_field = 'id'
