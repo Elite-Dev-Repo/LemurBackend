@@ -6,6 +6,7 @@ from .user_serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from django.contrib.auth.models import User
 from django.db.models import Count
+from rest_framework import filters
 
 # Create your views here.
 
@@ -42,6 +43,9 @@ class PostListCreateAPIView(ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     filterset_fields = ['author']
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'content']
+
 
 
     def get_queryset(self):
@@ -61,7 +65,7 @@ class PostListCreateAPIView(ListCreateAPIView):
 
 
 class PostRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-    queryset = Post.objects.prefetch_related("comments", "likes") .annotate(
+    queryset = Post.objects.prefetch_related("comments", "likes").annotate(
                 like_count=Count("likes"),
                 comment_count=Count("comments"),
             )
